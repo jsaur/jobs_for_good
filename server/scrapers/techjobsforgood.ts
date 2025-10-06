@@ -48,7 +48,13 @@ export async function scrapeTechJobsForGood(): Promise<Job[]> {
       return results;
     });
 
-    return jobs;
+    // Filter to only remote jobs
+    const remoteJobs = jobs.filter(job => {
+      const locationLower = job.location.toLowerCase();
+      return locationLower.includes('remote');
+    });
+
+    return remoteJobs;
   } catch (error) {
     console.error('Error scraping Tech Jobs For Good:', error);
     if (browser) {

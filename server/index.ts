@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { scrapeTechJobsForGood } from './scrapers/techjobsforgood';
+import { scrapeImpactSource } from './scrapers/impactsource';
 import { Job } from './types';
 
 const app = express();
@@ -18,9 +19,16 @@ app.get('/api/jobs', async (req, res) => {
   try {
     const jobs: Job[] = [];
 
-    // Scrape all job boards
-    const techJobsForGoodJobs = await scrapeTechJobsForGood();
-    jobs.push(...techJobsForGoodJobs);
+    // Scrape all job boards in parallel
+    const [techJobsForGoodJobs, impactSourceJobs] = await Promise.all([
+      scrapeTechJobsForGood(),
+      scrapeImpactSource()
+    ]);
+
+    jobs.push(...techJobsForGoodJobs, ...impactSourceJobs);
+
+    console.log(`Fetched ${techJobsForGoodJobs.length} jobs from Tech Jobs For Good`);
+    console.log(`Fetched ${impactSourceJobs.length} jobs from ImpactSource`);
 
     // Sort by date posted (newest first) - we'll need to parse the date strings
     jobs.sort((a, b) => {
