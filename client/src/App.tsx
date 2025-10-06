@@ -58,13 +58,25 @@ function App() {
     return new Date(0);
   };
 
-  const sortedJobs = [...jobs].sort((a, b) => {
-    const dateA = parseDatePosted(a.datePosted);
-    const dateB = parseDatePosted(b.datePosted);
+  // Group jobs by company
+  const groupedByCompany = jobs.reduce((acc, job) => {
+    if (!acc[job.company]) {
+      acc[job.company] = [];
+    }
+    acc[job.company].push(job);
+    return acc;
+  }, {} as Record<string, Job[]>);
+
+  // Sort companies by the newest job posting date within each company
+  const sortedCompanies = Object.entries(groupedByCompany).sort(([, jobsA], [, jobsB]) => {
+    const newestDateA = Math.max(...jobsA.map(j => parseDatePosted(j.datePosted).getTime()));
+    const newestDateB = Math.max(...jobsB.map(j => parseDatePosted(j.datePosted).getTime()));
     return sortOrder === 'newest'
-      ? dateB.getTime() - dateA.getTime()
-      : dateA.getTime() - dateB.getTime();
+      ? newestDateB - newestDateA
+      : newestDateA - newestDateB;
   });
+
+  const totalJobs = jobs.length;
 
   return (
     <div className="app">
@@ -94,22 +106,31 @@ function App() {
         <div className="loading">Loading jobs...</div>
       ) : (
         <div className="jobs-container">
-          <div className="jobs-count">{sortedJobs.length} jobs found</div>
-          {sortedJobs.map((job, index) => (
-            <div key={index} className="job-card">
-              <div className="job-header">
-                <h2>
-                  <a href={job.url} target="_blank" rel="noopener noreferrer">
-                    {job.title}
-                  </a>
-                </h2>
-                <span className="source">{job.source}</span>
+          <div className="jobs-count">{totalJobs} jobs from {sortedCompanies.length} companies</div>
+          {sortedCompanies.map(([company, companyJobs]) => (
+            <div key={company} className="company-box">
+              <div className="company-box-header">
+                <h2 className="company-name">{company}</h2>
+                <span className="company-job-count">{companyJobs.length} {companyJobs.length === 1 ? 'position' : 'positions'}</span>
               </div>
-              <div className="job-details">
-                <div className="company">{job.company}</div>
-                <div className="location">{job.location}</div>
-                {job.salary && <div className="salary">{job.salary}</div>}
-                <div className="date-posted">{job.datePosted}</div>
+              <div className="company-jobs">
+                {companyJobs.map((job, index) => (
+                  <div key={index} className="job-card">
+                    <div className="job-header">
+                      <h3>
+                        <a href={job.url} target="_blank" rel="noopener noreferrer">
+                          {job.title}
+                        </a>
+                      </h3>
+                      <span className="source">{job.source}</span>
+                    </div>
+                    <div className="job-details">
+                      <div className="location">{job.location}</div>
+                      {job.salary && <div className="salary">{job.salary}</div>}
+                      <div className="date-posted">{job.datePosted}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ))}

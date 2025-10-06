@@ -79,19 +79,57 @@ select {
 .jobs-container {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+}
+
+.company-box {
+  border: 2px solid #646cff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  background-color: rgba(100, 108, 255, 0.05);
+}
+
+.company-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #646cff;
+}
+
+.company-box-header .company-name {
+  margin: 0;
+  font-size: 1.75rem;
+  color: #646cff;
+}
+
+.company-job-count {
+  background-color: #646cff;
+  color: white;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.company-jobs {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
 }
 
 .job-card {
   border: 1px solid #333;
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1.25rem;
+  background-color: #1a1a1a;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .job-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.2);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.3);
 }
 
 .job-header {
@@ -101,22 +139,22 @@ select {
   margin-bottom: 0.75rem;
 }
 
-.job-header h2 {
+.job-header h3 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 
-.job-header h2 a {
+.job-header h3 a {
   color: #646cff;
   text-decoration: none;
 }
 
-.job-header h2 a:hover {
+.job-header h3 a:hover {
   text-decoration: underline;
 }
 
 .source {
-  background-color: #646cff;
+  background-color: rgba(100, 108, 255, 0.3);
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 4px;
@@ -134,11 +172,6 @@ select {
 .job-details > div {
   display: flex;
   align-items: center;
-}
-
-.company {
-  font-weight: 600;
-  color: #fff;
 }
 
 .location::before {
