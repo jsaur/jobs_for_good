@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+package-lock.json
+
+# Client
+client/node_modules/
+client/dist/
+client/.vite/
+
+# Test files
+test-scraper.js
