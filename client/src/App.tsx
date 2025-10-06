@@ -4,24 +4,34 @@ import './App.css';
 
 function App() {
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [companies, setCompanies] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
 
   useEffect(() => {
-    fetchJobs();
+    fetchData();
   }, []);
 
-  const fetchJobs = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('/api/jobs');
-      if (!response.ok) {
-        throw new Error('Failed to fetch jobs');
+
+      const [jobsResponse, companiesResponse] = await Promise.all([
+        fetch('/api/jobs'),
+        fetch('/api/companies')
+      ]);
+
+      if (!jobsResponse.ok || !companiesResponse.ok) {
+        throw new Error('Failed to fetch data');
       }
-      const data = await response.json();
-      setJobs(data);
+
+      const jobsData = await jobsResponse.json();
+      const companiesData = await companiesResponse.json();
+
+      setJobs(jobsData);
+      setCompanies(companiesData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -83,7 +93,7 @@ function App() {
       <header>
         <h1>Job Board Aggregator</h1>
         <div className="controls">
-          <button onClick={fetchJobs} disabled={loading}>
+          <button onClick={fetchData} disabled={loading}>
             {loading ? 'Loading...' : 'Refresh Jobs'}
           </button>
           <select
@@ -113,6 +123,9 @@ function App() {
                 <h2 className="company-name">{company}</h2>
                 <span className="company-job-count">{companyJobs.length} {companyJobs.length === 1 ? 'position' : 'positions'}</span>
               </div>
+              {companies[company] && (
+                <p className="company-description">{companies[company]}</p>
+              )}
               <div className="company-jobs">
                 {companyJobs.map((job, index) => (
                   <div key={index} className="job-card">

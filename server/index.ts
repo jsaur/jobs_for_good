@@ -3,6 +3,8 @@ import cors from 'cors';
 import { scrapeTechJobsForGood } from './scrapers/techjobsforgood';
 import { scrapeImpactSource } from './scrapers/impactsource';
 import { Job } from './types';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,6 +43,18 @@ app.get('/api/jobs', async (req, res) => {
   } catch (error) {
     console.error('Error fetching jobs:', error);
     res.status(500).json({ error: 'Failed to fetch jobs' });
+  }
+});
+
+app.get('/api/companies', (req, res) => {
+  try {
+    const companiesPath = path.join(__dirname, 'data', 'companies.json');
+    const companiesData = fs.readFileSync(companiesPath, 'utf-8');
+    const companies = JSON.parse(companiesData);
+    res.json(companies);
+  } catch (error) {
+    console.error('Error reading companies data:', error);
+    res.status(500).json({ error: 'Failed to load company data' });
   }
 });
 
