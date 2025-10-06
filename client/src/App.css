@@ -70,6 +70,36 @@ select {
   color: #888;
 }
 
+.source-breakdown {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: rgba(100, 108, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid #646cff;
+}
+
+.source-stat {
+  font-size: 1rem;
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.source-stat:hover {
+  color: #fff;
+}
+
+.source-stat strong {
+  color: #646cff;
+  font-size: 1.2rem;
+}
+
+.source-stat:hover strong {
+  color: #8b93ff;
+}
+
 .jobs-count {
   margin-bottom: 1rem;
   font-size: 1.1rem;

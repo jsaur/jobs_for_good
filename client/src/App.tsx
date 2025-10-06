@@ -88,6 +88,19 @@ function App() {
 
   const totalJobs = jobs.length;
 
+  // Count jobs by source
+  const jobsBySource = jobs.reduce((acc, job) => {
+    acc[job.source] = (acc[job.source] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Map source names to their URLs
+  const sourceUrls: Record<string, string> = {
+    'Tech Jobs For Good': 'https://techjobsforgood.com/jobs/?job_function=Software+Engineering&locations=remote&q=',
+    'ImpactSource.ai': 'https://www.impactsource.ai/jobs?jobTypes=Software+Engineer&remoteOnly=true',
+    'Idealist.org': 'https://www.idealist.org/en/jobs?functions=TECHNOLOGY_IT&locationType=REMOTE'
+  };
+
   return (
     <div className="app">
       <header>
@@ -116,6 +129,19 @@ function App() {
         <div className="loading">Loading jobs...</div>
       ) : (
         <div className="jobs-container">
+          <div className="source-breakdown">
+            {Object.entries(jobsBySource).map(([source, count]) => (
+              <a
+                key={source}
+                href={sourceUrls[source]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="source-stat"
+              >
+                {source}: <strong>{count}</strong>
+              </a>
+            ))}
+          </div>
           <div className="jobs-count">{totalJobs} jobs from {sortedCompanies.length} companies</div>
           {sortedCompanies.map(([company, companyJobs]) => (
             <div key={company} className="company-box">
