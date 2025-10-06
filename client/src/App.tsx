@@ -99,7 +99,8 @@ function App() {
     'Tech Jobs For Good': 'https://techjobsforgood.com/jobs/?job_function=Software+Engineering&locations=remote&q=',
     'ImpactSource.ai': 'https://www.impactsource.ai/jobs?jobTypes=Software+Engineer&remoteOnly=true',
     'Idealist.org': 'https://www.idealist.org/en/jobs?functions=TECHNOLOGY_IT&locationType=REMOTE',
-    'Escape the City': 'https://www.escapethecity.org/search/jobs?q=option-remote%253DRemote%2520-%2520100%25C2%25B6%25C2%25B7Remote%2520-%252098%2525%2526option-job-title%253DFull%2520Stack%2520Developer%25C2%25B7Back%2520End%2520Developer%25C2%25B7CTO%25C2%25B7Front%2520End%2520Developer%2526featured-tags%253DFlex%2520hours%25C2%25B7Remote%2520-%2520Anywhere'
+    'Escape the City': 'https://www.escapethecity.org/search/jobs?q=option-remote%253DRemote%2520-%2520100%25C2%25B6%25C2%25B7Remote%2520-%252098%2525%2526option-job-title%253DFull%2520Stack%2520Developer%25C2%25B7Back%2520End%2520Developer%25C2%25B7CTO%25C2%25B7Front%2520End%2520Developer%2526featured-tags%253DFlex%2520hours%25C2%25B7Remote%2520-%2520Anywhere',
+    'Climatebase': 'https://climatebase.org/jobs?q=Software+Engineer&l=eyJ2YWx1ZSI6InJlbW90ZSIsImxhYmVsIjoiUmVtb3RlIn0%3D&remote_preferences=Remote%7Cremote&remote=true'
   };
 
   return (
@@ -131,15 +132,15 @@ function App() {
       ) : (
         <div className="jobs-container">
           <div className="source-breakdown">
-            {Object.entries(jobsBySource).map(([source, count]) => (
+            {Object.entries(sourceUrls).map(([source, url]) => (
               <a
                 key={source}
-                href={sourceUrls[source]}
+                href={url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="source-stat"
               >
-                {source}: <strong>{count}</strong>
+                {source}: <strong>{jobsBySource[source] || 0}</strong>
               </a>
             ))}
           </div>
